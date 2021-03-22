@@ -11,7 +11,7 @@ import bodyParser from 'body-parser';
 import helmet from "helmet";
 
 import { ValidationError } from 'express-validation';
-// import MongoDb from './data/MongoDb';
+import MongoDb from './data/MongoDb';
 import pjson from '../package.json';
 
 export default class ApplicationServer {
@@ -27,9 +27,9 @@ export default class ApplicationServer {
         }
     }
 
-    // private async configureDatabase(): Promise<Db> {
-    //     return MongoDb.getDb();
-    // }
+    private async configureDatabase(): Promise<Db> {
+        return MongoDb.getDb();
+    }
 
     private configureMiddleware(): void {
         this.app.use(cors());
@@ -65,9 +65,9 @@ export default class ApplicationServer {
 
     async setupApp(): Promise<Application> {
         signale.success("start setupApp")
-        // if (!this.mongoDb) {
-        //     this.mongoDb = await this.configureDatabase();
-        // }
+        if (!this.mongoDb) {
+            this.mongoDb = await this.configureDatabase();
+        }
         signale.success('DataBase');
 
 

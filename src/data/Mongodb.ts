@@ -22,9 +22,6 @@ class MongoDb {
 
         signale.info('connected to mongoDb');
 
-        db.on('error', (error: any) => {
-            signale.error(error);
-        });
 
         return db;
     }
