@@ -2,7 +2,7 @@ import { createServer } from 'http';
 import dotenv from 'dotenv';
 import signale from 'signale';
 import ApplicationServer from './server';
-
+import 'reflect-metadata';
 
 dotenv.config()
 
