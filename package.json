@@ -23,8 +23,10 @@
     "express-validation": "^3.0.8",
     "helmet": "^4.4.1",
     "mongodb": "^3.6.5",
+    "reflect-metadata": "^0.1.13",
     "signale": "^1.4.0",
-    "throng": "^5.0.0"
+    "throng": "^5.0.0",
+    "tsyringe": "^4.4.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

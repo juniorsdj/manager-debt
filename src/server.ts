@@ -11,6 +11,7 @@ import bodyParser from 'body-parser';
 import helmet from "helmet";
 
 import { ValidationError } from 'express-validation';
+import { DebtModule } from './modules';
 import MongoDb from './data/MongoDb';
 import pjson from '../package.json';
 
@@ -60,7 +61,7 @@ export default class ApplicationServer {
 
 
     private configureModules(app: Application, db: Db): void {
-        // ExampleModule.configure(app, db);
+        DebtModule.configure(app, db);
     }
 
     async setupApp(): Promise<Application> {

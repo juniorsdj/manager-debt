@@ -37,6 +37,7 @@ class MongoDb {
 }
 
 export const collections = {
+    debt: "debt"
 };
 
 export default MongoDb;
