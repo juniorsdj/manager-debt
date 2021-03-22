@@ -3,7 +3,6 @@ import express, { Application, Request, Response } from 'express';
 
 
 
-import { JsonPlaceholderService } from './services'
 
 import cors from 'cors';
 import signale from 'signale';
@@ -82,7 +81,6 @@ export default class ApplicationServer {
         signale.success('ErrorRouter');
 
 
-        JsonPlaceholderService.getUserList()
         return this.app;
     }
 }
