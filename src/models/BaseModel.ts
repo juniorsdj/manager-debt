@@ -1,6 +1,8 @@
 import { ObjectId } from "mongodb";
 import signale from "signale";
 
+export const OBJECTID_REGEX = /^[0-9a-fA-F]{24}$/;
+
 export default class BaseModel {
 
     createdAt: Date;

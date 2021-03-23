@@ -50,6 +50,16 @@ export class DebtRepository {
 
         return data
     }
+    async findOne(
+        mongoFilters?: any,
+    ): Promise<IDebt | null> {
+
+        const data: IDebt = await this.collection
+            .findOne(mongoFilters)
+
+
+        return data
+    }
 
     async find(
         mongoFilters?: any,

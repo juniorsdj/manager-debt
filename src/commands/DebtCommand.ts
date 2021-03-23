@@ -1,3 +1,4 @@
+import { ObjectId } from 'bson';
 import 'reflect-metadata';
 import { autoInjectable, scoped, Lifecycle } from 'tsyringe';
 import { DEBTS_SORT_VALUES, DEFAULT_LIMIT_RESPONSE_SIZE, DEFAULT_PAGE_SKIP } from '../constants';
@@ -14,7 +15,7 @@ export class DebtCommand extends BaseCommand {
         super();
     }
 
-    getAll = async (userId: string, limit: number, page: number, order: string): Promise<any> => {
+    getAll = async (limit: number, page: number, order: string, userId?: string): Promise<any> => {
         try {
             let offset
             let sort
@@ -57,6 +58,15 @@ export class DebtCommand extends BaseCommand {
             }
 
             const result = await this.repository.find({ limit, offset, userId }, project, sort)
+            return result
+        } catch (ex) {
+            return this.handleException(ex);
+        }
+    }
+    getDebtById = async (_id: string | ObjectId): Promise<any> => {
+        try {
+
+            const result = await this.repository.findOne(new ObjectId(_id))
             return result
         } catch (ex) {
             return this.handleException(ex);
