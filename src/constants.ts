@@ -5,11 +5,11 @@ export const DEFAULT_PAGE_SKIP = 1;
 
 
 export const DEBTS_SORT_VALUES = {
-    VALUE_ASC: "VALUE_ASC",
-    VALUE_DESC: "VALUE_DESC",
-    DEBT_DATE_ASC: "DEBT_DATE_ASC",
-    DEBT_DATE_DESC: "DEBT_DATE_DESC"
+    VALUE_ASC: "value_asc",
+    VALUE_DESC: "value_desc",
+    DEBT_DATE_ASC: "debt_date_asc",
+    DEBT_DATE_DESC: "debt_date_desc"
 }
 
-export const SORT_DEBTS_REGEX = /^(VALUE_ASC|VALUE_DESC|DEBT_DATE_ASC|DEBT_DATE_DESC)$/;
+export const SORT_DEBTS_REGEX = /^(value_asc|value_desc|debt_date_asc|debt_date_desc)$/;
 
