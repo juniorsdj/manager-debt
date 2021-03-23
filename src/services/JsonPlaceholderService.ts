@@ -13,10 +13,10 @@ const headers = {
 
 
 export class JsonPlaceholderService {
-    static getUserList = async (): Promise<IUser> => {
+    static getUserList = async (): Promise<IUser | void> => {
         try {
             const request = await axios.get(`${process.env.JSON_PLACHOLDER_URL}/users`, headers);
-            return request.data;
+            return request.data as IUser;
         } catch (error) {
             signale.error(`${error.toString()}, ${process.env.JSON_PLACHOLDER_URL}`)
             // return handleErrorRequestService(error, JSON_PLACHOLDER_URL);

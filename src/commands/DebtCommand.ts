@@ -11,7 +11,7 @@ export class DebtCommand extends BaseCommand {
         super();
     }
 
-    about = async (): Promise<any> => {
+    getAll = async (): Promise<any> => {
         try {
 
             const about = {

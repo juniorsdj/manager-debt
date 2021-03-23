@@ -12,7 +12,7 @@ export class DebtController extends BaseController<any>{
     getCommand(): DebtCommand {
         return container.createChildContainer().resolve('DebtCommand')
     }
-    get about(): IControllerMethodType {
+    get getAll(): IControllerMethodType {
         return {
             auth: {
                 roles: [],
@@ -30,7 +30,7 @@ export class DebtController extends BaseController<any>{
                     const command = this.getCommand();
 
 
-                    const result = await command.about();
+                    const result = await command.getAll();
 
                     if (!result || !command.isValid()) {
                         return this.Fail(res, command.errors);
