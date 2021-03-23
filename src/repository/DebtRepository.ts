@@ -39,7 +39,7 @@ export class DebtRepository {
     }
 
 
-    async find(
+    async findWithoutPagination(
         mongoFilters?: any,
     ): Promise<IDebt[]> {
 
@@ -49,5 +49,53 @@ export class DebtRepository {
 
 
         return data
+    }
+
+    async find(
+        mongoFilters?: any,
+        $project?: any,
+        $sort?: any
+    ): Promise<ResultPaginado<IDebt[]>> {
+        let limit: string | number | undefined;
+        let offset: string | number | undefined;
+        let filters = {};
+
+        if (mongoFilters) {
+            const {
+                limit: filterLimit,
+                offset: filterOffset,
+                ...restFilters
+            } = mongoFilters;
+
+            limit = filterLimit;
+            offset = filterOffset;
+            filters = restFilters ?? filters;
+        }
+
+        const aggregate: any = [
+            { $match: filters }
+        ]
+
+        if ($project) aggregate.push({ $project })
+        if ($sort) aggregate.push({ $sort })
+
+        if (offset) {
+            aggregate.push({ $skip: offset })
+        }
+
+        if (limit) {
+            aggregate.push({ $limit: limit })
+        }
+
+        const data = await this.collection
+            .aggregate(aggregate)
+            .toArray();
+
+        const totalCount = await this.collection.countDocuments(filters);
+
+        return {
+            data,
+            totalCount: totalCount || 0,
+        };
     }
 }

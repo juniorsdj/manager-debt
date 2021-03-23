@@ -11,6 +11,7 @@ import { DebtRouter } from './../routes';
 import { DEBT_PATH_PREFIX } from './../constants'
 import { DebtController } from '../controllers';
 import { DebtCommand } from '../commands';
+import { DebtRepository } from '../repository';
 export class DebtModule {
     static configure(app: Application, db: Db): void {
         this.configureDI(db);
@@ -35,6 +36,9 @@ export class DebtModule {
     }
 
     static configureClassDI(): void {
+        container.register('DebtRepository', {
+            useClass: DebtRepository,
+        });
         container.register('DebtCommand', {
             useClass: DebtCommand,
         });
