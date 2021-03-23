@@ -1,5 +1,5 @@
 import Joi from 'joi';
-
+import { Response, Request } from 'express'
 import { container, singleton } from 'tsyringe';
 import { DebtCommand } from '../commands';
 import BaseController, { IControllerMethodType } from './BaseController';
@@ -25,7 +25,7 @@ export class DebtController extends BaseController<any>{
                 })
 
             },
-            fn: async (req: Request, res: Response): Promise<void> => {
+            fn: async (_req: Request, res: Response): Promise<void> => {
                 try {
                     const command = this.getCommand();
 
