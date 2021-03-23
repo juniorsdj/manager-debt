@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash'
 @injectable()
 export class DebtRepository {
     constructor(
-        @inject('IDebtCollection') private collection: Collection<IDebt>,
+        @inject('DebtCollection') private collection: Collection<IDebt>,
     ) { }
 
 

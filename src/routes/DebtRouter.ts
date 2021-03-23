@@ -13,6 +13,7 @@ export class DebtRouter implements IRouter {
     getRoutes(): Router {
         return new RouterBuilder()
             .get('/', this.controller.getAll)
+            .post('/', this.controller.createDebt)
             .build()
 
     }
