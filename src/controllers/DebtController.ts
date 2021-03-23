@@ -85,6 +85,40 @@ export class DebtController extends BaseController<any>{
             }
         }
     }
+    get deleteDebtById(): IControllerMethodType {
+        return {
+            auth: {
+                roles: [],
+                config: {
+
+                }
+            },
+            schema: {
+                params: Joi.object({
+                    _id: Joi.string().regex(OBJECTID_REGEX).required()
+                })
+
+            },
+            fn: async (req: Request, res: Response): Promise<void> => {
+                try {
+                    const command = this.getCommand();
+                    const { _id
+                    } = req.params
+
+                    const result = await command.deleteDebtById(_id);
+
+                    if (!result || !command.isValid()) {
+                        return this.Fail(res, command.errors);
+                    }
+
+                    return this.Ok(res, result);
+
+                } catch (ex) {
+                    this.ServerError(res, ex)
+                }
+            }
+        }
+    }
     get getDebtsByUserId(): IControllerMethodType {
         return {
             auth: {

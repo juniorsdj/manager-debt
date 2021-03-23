@@ -72,6 +72,15 @@ export class DebtCommand extends BaseCommand {
             return this.handleException(ex);
         }
     }
+    deleteDebtById = async (_id: string | ObjectId): Promise<any> => {
+        try {
+
+            const result = await this.repository.delete(new ObjectId(_id))
+            return result
+        } catch (ex) {
+            return this.handleException(ex);
+        }
+    }
     createDebt = async (userId: string, reason: string, debtDate: Date, value: number): Promise<any> => {
         try {
 

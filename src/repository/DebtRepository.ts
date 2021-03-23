@@ -3,6 +3,7 @@ import { injectable, inject, singleton } from 'tsyringe';
 import { Collection, ObjectId } from 'mongodb';
 import { IDebt, ResultPaginado } from './../types';
 import { isEmpty } from 'lodash'
+import { removeNil } from '../helpers';
 @singleton()
 @injectable()
 export class DebtRepository {
@@ -54,7 +55,7 @@ export class DebtRepository {
         mongoFilters?: any,
     ): Promise<IDebt | null> {
 
-        const data: IDebt = await this.collection
+        const data: IDebt | null = await this.collection
             .findOne(mongoFilters)
 
 
@@ -79,7 +80,7 @@ export class DebtRepository {
 
             limit = filterLimit;
             offset = filterOffset;
-            filters = restFilters ?? filters;
+            filters = removeNil(restFilters) ?? filters;
         }
 
         const aggregate: any = [
