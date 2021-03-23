@@ -25,6 +25,38 @@ export class DebtModel extends BaseModel implements IDebt {
         }
         return dbt.toIDebt()
     }
+    static update(_id: string,
+        {
+            reason,
+            debtDate,
+            value
+        }: {
+            reason?: string,
+            debtDate?: Date,
+            value?: number
+        }): Partial<IDebt> | string {
+
+        const dbt: Partial<IDebt> = {
+            _id: new ObjectId(_id)
+        };
+
+        if (value) {
+            if (value < 0) {
+                return "Valor do débito deve ser maior que 0"
+            }
+
+            dbt.value = value
+        }
+
+        if (debtDate) {
+            dbt.debtDate = debtDate
+        }
+        if (reason) {
+            dbt.reason = reason
+        }
+
+        return dbt
+    }
 
 
     toIDebt(

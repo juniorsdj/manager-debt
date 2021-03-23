@@ -119,6 +119,47 @@ export class DebtController extends BaseController<any>{
             }
         }
     }
+    get updateDebtById(): IControllerMethodType {
+        return {
+            auth: {
+                roles: [],
+                config: {
+
+                }
+            },
+            schema: {
+                params: Joi.object({
+                    _id: Joi.string().regex(OBJECTID_REGEX).required()
+                }),
+                body: Joi.object({
+                    reason: Joi.string(),
+                    debtDate: Joi.date(),
+                    value: Joi.number()
+                })
+
+            },
+            fn: async (req: Request, res: Response): Promise<void> => {
+                try {
+                    const command = this.getCommand();
+                    const { _id
+                    } = req.params
+                    const { reason, debtDate, value
+                    } = req.body
+
+                    const result = await command.updateDebtById(_id, reason, debtDate, value);
+
+                    if (!result || !command.isValid()) {
+                        return this.Fail(res, command.errors);
+                    }
+
+                    return this.Ok(res, result);
+
+                } catch (ex) {
+                    this.ServerError(res, ex)
+                }
+            }
+        }
+    }
     get getDebtsByUserId(): IControllerMethodType {
         return {
             auth: {

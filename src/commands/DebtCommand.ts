@@ -89,12 +89,43 @@ export class DebtCommand extends BaseCommand {
             if (typeof dbt === "string") {
                 return this.addError(dbt)
             }
-            const isInserted = await this.repository.create(dbt)
-            if (!isInserted) {
+            const insertedObj = await this.repository.create(dbt)
+            if (!insertedObj) {
                 return this.addError("Fail on inserted on database")
             }
 
-            return isInserted;
+            return insertedObj;
+        } catch (ex) {
+            return this.handleException(ex);
+        }
+    }
+    updateDebtById = async (_id: string, reason?: string, debtDate?: Date, value?: number): Promise<any> => {
+        try {
+
+            const dbt = await this.repository.findOne({ _id: new ObjectId(_id) })
+
+            if (!dbt) {
+                return this.addError("Dívida não encontrada")
+            }
+
+            const debtToUpdate = DebtModel.update(_id, { reason, debtDate, value })
+
+            if (typeof debtToUpdate === "string") {
+                return this.addError(debtToUpdate)
+            }
+
+            if (!debtToUpdate._id) {
+                return this.addError("Id não encontrado")
+            }
+
+            const isUpdated = await this.repository.update(debtToUpdate._id, debtToUpdate)
+
+
+            if (!isUpdated) {
+                return this.addError("Fail on inserted on database")
+            }
+
+            return isUpdated;
         } catch (ex) {
             return this.handleException(ex);
         }

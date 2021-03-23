@@ -15,6 +15,7 @@ export class DebtRouter implements IRouter {
             .get('/', this.controller.getAll)
             .get('/:_id', this.controller.getDebtById)
             .delete('/:_id', this.controller.deleteDebtById)
+            .put('/:_id', this.controller.updateDebtById)
             .get('/users/:userId', this.controller.getDebtsByUserId)
             .post('/', this.controller.createDebt)
             .build()
