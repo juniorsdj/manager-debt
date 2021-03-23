@@ -12,7 +12,7 @@ import helmet from "helmet";
 
 import { ValidationError } from 'express-validation';
 import { DebtModule } from './modules';
-import MongoDb from './data/MongoDb';
+import MongoDb from './data/Mongodb';
 import pjson from '../package.json';
 
 export default class ApplicationServer {

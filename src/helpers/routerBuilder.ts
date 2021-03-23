@@ -4,7 +4,7 @@ import express, { Router, RequestHandler, request } from 'express';
 
 // import { IControllerMethodType } from '../controller/BaseController';
 
-export default class RouterBuilder {
+export class RouterBuilder {
     private router: Router;
 
     constructor(router?: Router) {
