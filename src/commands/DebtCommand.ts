@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { autoInjectable, scoped, Lifecycle } from 'tsyringe';
-import { DEFAULT_LIMIT_RESPONSE_SIZE, DEFAULT_PAGE_SKIP } from '../constants';
+import { DEBTS_SORT_VALUES, DEFAULT_LIMIT_RESPONSE_SIZE, DEFAULT_PAGE_SKIP } from '../constants';
 import { DebtModel } from '../models';
 import { DebtRepository } from '../repository';
 import pjson from './../../package.json';
@@ -14,9 +14,11 @@ export class DebtCommand extends BaseCommand {
         super();
     }
 
-    getAll = async (limit: number, page: number): Promise<any> => {
+    getAll = async (limit: number, page: number, order: string): Promise<any> => {
         try {
             let offset
+            let sort
+            let project
             if (!limit) {
                 limit = DEFAULT_LIMIT_RESPONSE_SIZE
             }
@@ -28,7 +30,33 @@ export class DebtCommand extends BaseCommand {
             offset = DEFAULT_LIMIT_RESPONSE_SIZE * (page - 1)
 
 
-            const result = await this.repository.find({ limit, offset })
+
+
+            switch (order) {
+                case DEBTS_SORT_VALUES.DEBT_DATE_ASC:
+                    sort = {
+                        debtDate: 1
+                    }
+                    break
+                case DEBTS_SORT_VALUES.DEBT_DATE_DESC:
+                    sort = {
+                        debtDate: -1
+                    }
+                    break
+                case DEBTS_SORT_VALUES.VALUE_ASC:
+                    sort = {
+                        value: 1
+                    }
+                    break
+                case DEBTS_SORT_VALUES.VALUE_DESC:
+                    sort = {
+                        value: -1
+                    }
+                    break
+                default:
+            }
+
+            const result = await this.repository.find({ limit, offset }, project, sort)
             return result
         } catch (ex) {
             return this.handleException(ex);

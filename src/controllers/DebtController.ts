@@ -4,6 +4,7 @@ import { container, singleton } from 'tsyringe';
 import { DebtCommand } from '../commands';
 import BaseController, { IControllerMethodType } from './BaseController';
 import { DEFAULT_LIMIT_RESPONSE_SIZE, DEFAULT_PAGE_SKIP } from '../constants';
+import { SORT_DEBTS_REGEX } from '../constants';
 
 @singleton()
 export class DebtController extends BaseController<any>{
@@ -25,16 +26,17 @@ export class DebtController extends BaseController<any>{
                 query: Joi.object({
                     limit: Joi.number().integer().allow(null).optional().default(DEFAULT_LIMIT_RESPONSE_SIZE),
                     page: Joi.number().integer().allow(null).optional().default(DEFAULT_PAGE_SKIP),
+                    sort: Joi.string().regex(SORT_DEBTS_REGEX).optional()
                 })
 
             },
             fn: async (req: Request, res: Response): Promise<void> => {
                 try {
                     const command = this.getCommand();
-                    const { limit, page
+                    const { limit, page, sort
                     } = req.query
 
-                    const result = await command.getAll(Number(limit), Number(page));
+                    const result = await command.getAll(Number(limit), Number(page), String(sort));
 
                     if (!result || !command.isValid()) {
                         return this.Fail(res, command.errors);
