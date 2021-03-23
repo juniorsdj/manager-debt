@@ -50,6 +50,47 @@ export class DebtController extends BaseController<any>{
             }
         }
     }
+    get getDebtsByUserId(): IControllerMethodType {
+        return {
+            auth: {
+                roles: [],
+                config: {
+
+                }
+            },
+            schema: {
+                query: Joi.object({
+                    limit: Joi.number().integer().allow(null).optional().default(DEFAULT_LIMIT_RESPONSE_SIZE),
+                    page: Joi.number().integer().allow(null).optional().default(DEFAULT_PAGE_SKIP),
+                    sort: Joi.string().regex(SORT_DEBTS_REGEX).optional()
+                }),
+                params: Joi.object({
+                    userId: Joi.string().required()
+                })
+
+            },
+            fn: async (req: Request, res: Response): Promise<void> => {
+                try {
+                    const command = this.getCommand();
+                    const { limit, page, sort
+                    } = req.query
+                    const { userId
+                    } = req.params
+
+                    const result = await command.getAll(userId, Number(limit), Number(page), String(sort));
+
+                    if (!result || !command.isValid()) {
+                        return this.Fail(res, command.errors);
+                    }
+
+                    return this.OkPaginado(res, result);
+
+                } catch (ex) {
+                    this.ServerError(res, ex)
+                }
+            }
+        }
+    }
     get createDebt(): IControllerMethodType {
         return {
             auth: {

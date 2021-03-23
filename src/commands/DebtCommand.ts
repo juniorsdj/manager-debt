@@ -14,7 +14,7 @@ export class DebtCommand extends BaseCommand {
         super();
     }
 
-    getAll = async (limit: number, page: number, order: string): Promise<any> => {
+    getAll = async (userId: string, limit: number, page: number, order: string): Promise<any> => {
         try {
             let offset
             let sort
@@ -56,7 +56,7 @@ export class DebtCommand extends BaseCommand {
                 default:
             }
 
-            const result = await this.repository.find({ limit, offset }, project, sort)
+            const result = await this.repository.find({ limit, offset, userId }, project, sort)
             return result
         } catch (ex) {
             return this.handleException(ex);
