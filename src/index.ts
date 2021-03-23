@@ -28,6 +28,6 @@ new ApplicationServer()
         server.on('error', onError);
     })
     .catch(err => {
-        signale.error('Erro ao startar aplicação', err.toString());
+        signale.error('Error on app start', err.toString());
         process.exit();
     });

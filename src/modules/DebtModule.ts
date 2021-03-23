@@ -9,6 +9,8 @@ import { collections } from '../data/Mongodb';
 import { IDebt } from './../types';
 import { DebtRouter } from './../routes';
 import { DEBT_PATH_PREFIX } from './../constants'
+import { DebtController } from '../controllers';
+import { DebtCommand } from '../commands';
 export class DebtModule {
     static configure(app: Application, db: Db): void {
         this.configureDI(db);
@@ -33,5 +35,16 @@ export class DebtModule {
     }
 
     static configureClassDI(): void {
+        container.register('DebtCommand', {
+            useClass: DebtCommand,
+        });
+
+        container.register('DebtController', {
+            useClass: DebtController,
+        });
+
+        container.register('DebtRouter', {
+            useClass: DebtRouter,
+        });
     }
 }

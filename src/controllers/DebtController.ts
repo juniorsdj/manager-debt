@@ -1,9 +1,17 @@
 import Joi from 'joi';
 
 import { container, singleton } from 'tsyringe';
+import { DebtCommand } from '../commands';
+import BaseController, { IControllerMethodType } from './BaseController';
 
 @singleton()
-export class DebtController {
+export class DebtController extends BaseController<any>{
+    constructor() {
+        super();
+    }
+    getCommand(): DebtCommand {
+        return container.createChildContainer().resolve('DebtCommand')
+    }
     get about(): IControllerMethodType {
         return {
             auth: {
