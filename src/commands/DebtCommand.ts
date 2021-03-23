@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { autoInjectable, scoped, Lifecycle } from 'tsyringe';
+import { DEFAULT_LIMIT_RESPONSE_SIZE, DEFAULT_PAGE_SKIP } from '../constants';
 import { DebtModel } from '../models';
 import { DebtRepository } from '../repository';
 import pjson from './../../package.json';
@@ -13,13 +14,22 @@ export class DebtCommand extends BaseCommand {
         super();
     }
 
-    getAll = async (): Promise<any> => {
+    getAll = async (limit: number, page: number): Promise<any> => {
         try {
-
-            const about = {
-                version: pjson.version
+            let offset
+            if (!limit) {
+                limit = DEFAULT_LIMIT_RESPONSE_SIZE
             }
-            return about;
+            if (!page) {
+                page = DEFAULT_PAGE_SKIP
+            }
+
+
+            offset = DEFAULT_LIMIT_RESPONSE_SIZE * (page - 1)
+
+
+            const result = await this.repository.find({ limit, offset })
+            return result
         } catch (ex) {
             return this.handleException(ex);
         }

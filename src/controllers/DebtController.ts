@@ -3,6 +3,7 @@ import { Response, Request } from 'express'
 import { container, singleton } from 'tsyringe';
 import { DebtCommand } from '../commands';
 import BaseController, { IControllerMethodType } from './BaseController';
+import { DEFAULT_LIMIT_RESPONSE_SIZE, DEFAULT_PAGE_SKIP } from '../constants';
 
 @singleton()
 export class DebtController extends BaseController<any>{
@@ -21,22 +22,25 @@ export class DebtController extends BaseController<any>{
                 }
             },
             schema: {
-                body: Joi.object({
+                query: Joi.object({
+                    limit: Joi.number().integer().allow(null).optional().default(DEFAULT_LIMIT_RESPONSE_SIZE),
+                    page: Joi.number().integer().allow(null).optional().default(DEFAULT_PAGE_SKIP),
                 })
 
             },
-            fn: async (_req: Request, res: Response): Promise<void> => {
+            fn: async (req: Request, res: Response): Promise<void> => {
                 try {
                     const command = this.getCommand();
+                    const { limit, page
+                    } = req.query
 
-
-                    const result = await command.getAll();
+                    const result = await command.getAll(Number(limit), Number(page));
 
                     if (!result || !command.isValid()) {
                         return this.Fail(res, command.errors);
                     }
 
-                    return this.Ok(res, result);
+                    return this.OkPaginado(res, result);
 
                 } catch (ex) {
                     this.ServerError(res, ex)
@@ -65,7 +69,7 @@ export class DebtController extends BaseController<any>{
                 try {
                     const {
                         userId, reason, debtDate, value
-                    }:{
+                    }: {
                         userId: string,
                         reason: string,
                         debtDate: Date,
