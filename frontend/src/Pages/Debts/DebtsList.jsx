@@ -4,10 +4,7 @@ import { format } from 'date-fns';
 import br from 'date-fns/locale/pt-BR';
 import { debtsRequests } from './../../Services/Requests'
 import { SIZE_DEFAULT_PAGE } from './../../constants'
-// VALUE_ASC: "value_asc",
-// VALUE_DESC: "value_desc",
-// DEBT_DATE_ASC: "debt_date_asc",
-// DEBT_DATE_DESC: "debt_date_desc"
+
 const OPTIONS_SORT = [
     {
         key: "value_asc",
