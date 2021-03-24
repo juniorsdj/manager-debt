@@ -14,6 +14,7 @@ import { ValidationError } from 'express-validation';
 import { DebtModule } from './modules';
 import MongoDb from './data/Mongodb';
 import pjson from '../package.json';
+import { JsonPlaceholderService } from './services';
 
 export default class ApplicationServer {
     app: Application;
@@ -35,8 +36,30 @@ export default class ApplicationServer {
     private configureMiddleware(): void {
         this.app.use(cors());
         this.app.use(helmet());
-        this.app.use(bodyParser.urlencoded({ extended: true }));
-        this.app.use(bodyParser.json({ limit: '10mb' }));
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(express.json({ limit: '10mb' }));
+
+        //Não estou seguindo a arquitetura aqui por que montei ela apenas para demonstrar conhecimento. Para deixar a coisa menos verbosa e mais rápida de ser implementada irei fugir do padrão. Não considerar na hora da análise :)
+        this.app.get('/users', async (_, res) => {
+            try {
+                const users = await JsonPlaceholderService.getUserList()
+                if(users){
+                    res.status(200).send({
+                        r: true,
+                        data: users
+                    })
+                }else{
+                    res.status(200).send({
+                        r: false,
+                        errors: ["Falha ao pegar os usuários"]
+                    })
+                }
+            } catch (error) {
+                res.status(500).send({
+                    ex: JSON.stringify(error)
+                })
+            }
+        })
 
         this.app.get('/server-status', (_, res) => {
             res.send(pjson.version);

@@ -6,6 +6,7 @@ import BaseModel from "./BaseModel";
 export class DebtModel extends BaseModel implements IDebt {
     constructor(
         public userId: string,
+        public userName: string,
         public reason: string,
         public debtDate: Date,
         public value: number,
@@ -15,10 +16,11 @@ export class DebtModel extends BaseModel implements IDebt {
     }
 
     static create(userId: string,
+        userName: string,
         reason: string,
         debtDate: Date,
         value: number): IDebt | string {
-        const dbt = new DebtModel(userId, reason, debtDate, value)
+        const dbt = new DebtModel(userId,userName, reason, debtDate, value)
 
         if (value < 0) {
             return "Valor do débito deve ser maior que 0"

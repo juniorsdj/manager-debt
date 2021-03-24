@@ -4,6 +4,7 @@ import { autoInjectable, scoped, Lifecycle } from 'tsyringe';
 import { DEBTS_SORT_VALUES, DEFAULT_LIMIT_RESPONSE_SIZE, DEFAULT_PAGE_SKIP } from '../constants';
 import { DebtModel } from '../models';
 import { DebtRepository } from '../repository';
+import { JsonPlaceholderService } from '../services';
 import pjson from './../../package.json';
 
 import BaseCommand from './BaseCommand';
@@ -84,7 +85,13 @@ export class DebtCommand extends BaseCommand {
     createDebt = async (userId: string, reason: string, debtDate: Date, value: number): Promise<any> => {
         try {
 
-            const dbt = DebtModel.create(userId, reason, debtDate, value)
+            const user = await JsonPlaceholderService.getUserById(userId)
+
+            if (!user) {
+                return this.addError("usuário não encontrado")
+            }
+
+            const dbt = DebtModel.create(userId, user.name, reason, debtDate, value)
 
             if (typeof dbt === "string") {
                 return this.addError(dbt)
