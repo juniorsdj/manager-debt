@@ -1,0 +1,1 @@
+export const SIZE_DEFAULT_PAGE = 30
