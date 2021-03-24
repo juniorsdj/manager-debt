@@ -10,8 +10,8 @@ const stringifyQueryString = (obj) => {
 
 
 export const debtsRequests = {
-    getAll: ({ page }) => {
-        return AxiosApi.get(`/debts?${stringifyQueryString({ page })}`);
+    getAll: ({ page, sort }) => {
+        return AxiosApi.get(`/debts?${stringifyQueryString({ page, sort })}`);
     },
     getDebtById: (_id) => {
         return AxiosApi.get(`/debts/${_id}`);

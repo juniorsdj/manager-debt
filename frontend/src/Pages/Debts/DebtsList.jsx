@@ -1,21 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Table, Pagination, Breadcrumb } from 'semantic-ui-react';
+import { Container, Table, Pagination, Breadcrumb, Form, Dropdown, Tab } from 'semantic-ui-react';
 import { format } from 'date-fns';
 import br from 'date-fns/locale/pt-BR';
 import { debtsRequests } from './../../Services/Requests'
 import { SIZE_DEFAULT_PAGE } from './../../constants'
+// VALUE_ASC: "value_asc",
+// VALUE_DESC: "value_desc",
+// DEBT_DATE_ASC: "debt_date_asc",
+// DEBT_DATE_DESC: "debt_date_desc"
+const OPTIONS_SORT = [
+    {
+        key: "value_asc",
+        value: "value_asc",
+        text: "Valor da dívida crescente"
+    },
+    {
+        key: "value_desc",
+        value: "value_desc",
+        text: "Valor da dívida decrescente"
+    },
+    {
+        key: "debt_date_asc",
+        value: "debt_date_asc",
+        text: "Data da dívida crescente"
+    },
+    {
+        key: "debt_date_desc",
+        value: "debt_date_desc",
+        text: "Data da dívida decrescente"
+    },
+]
 const DebtsList = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [listDebts, setListDebts] = useState([])
     const [totalCountDebts, setTotalCountDebts] = useState(0)
     const [totalPages, setTotalPages] = useState(0)
     const [activePage, setActivePage] = useState(1)
+    const [sortSearch, setSortSearch] = useState("debt_date_desc")
 
     useEffect(() => {
         setIsLoading(true)
 
 
-        debtsRequests.getAll({ page: activePage })
+        debtsRequests.getAll({ page: activePage, sort: sortSearch })
             .then((r) => {
                 if (r.r) {
                     setIsLoading(false)
@@ -30,7 +57,7 @@ const DebtsList = () => {
                     console.log(err)
                 }
             )
-    }, [activePage])
+    }, [activePage, sortSearch])
 
     function handlePaginationChange(ev, { activePage }) {
         setActivePage(activePage)
@@ -83,7 +110,137 @@ const DebtsList = () => {
                 <Breadcrumb.Divider icon="right angle" />
                 <Breadcrumb.Section active>Dívidas</Breadcrumb.Section>
             </Breadcrumb>
-            
+
+
+            <Form
+                className="small-margin-top"
+                onSubmit={() =>
+                    this.setState({ page: 1 }, () => this.getPlaces())
+                }
+            >
+                <Form.Group>
+                    <Form.Field
+                        id="form-input-control-last-name"
+                        control={Dropdown}
+                        width={6}
+                        label="Ordenação"
+                        selection
+                        search
+                        disabled={isLoading}
+                        options={OPTIONS_SORT}
+                        value={sortSearch}
+                        onChange={(ev, { value }) =>
+                            setSortSearch(value)
+                        }
+                    />
+                </Form.Group>
+                {/* <Form.Field
+                        id="form-input-control-last-name"
+                        control={Dropdown}
+                        width={6}
+                        label="Categoria Principal"
+                        selection
+                        search
+                        disabled={this.state.formDisable}
+                        options={
+                            this.state.tagCategoriaPrincipalOptions
+                        }
+                        value={this.state.categoriaPrincipalSelected}
+                        onChange={(ev, { value }) =>
+                            this.setState({
+                                categoriaPrincipalSelected: value,
+                            })
+                        }
+                    />
+
+                    <Form.Field
+                        id="form-input-control-last-name"
+                        control={Dropdown}
+                        width={6}
+                        label="Município"
+                        selection
+                        disabled={this.state.formDisable}
+                        search
+                        options={municipioOptions}
+                        value={municipioId}
+                        onChange={(ev, { value }) =>
+                            this.setState({ municipioId: value })
+                        }
+                    />
+                    <Form.Field
+                        id="form-input-control-last-name"
+                        control={Dropdown}
+                        width={6}
+                        label="Status"
+                        selection
+                        search
+                        disabled={this.state.formDisable}
+                        options={this.state.statusOptions}
+                        value={this.state.statusSelected}
+                        onChange={(ev, { value }) =>
+                            this.setState({ statusSelected: value })
+                        }
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Field
+                        id="form-input-control-last-name"
+                        control={Dropdown}
+                        width={6}
+                        label="Forma Pagamento"
+                        selection
+                        search
+                        disabled={this.state.formDisable}
+                        options={this.state.formaPagamentoOptions}
+                        value={this.state.formaPagamentoSelected}
+                        onChange={(ev, { value }) =>
+                            this.setState({
+                                formaPagamentoSelected: value,
+                            })
+                        }
+                    />
+                    <Form.Field
+                        id="form-input-control-last-name"
+                        control={Dropdown}
+                        width={6}
+                        label="Horário Zerado"
+                        selection
+                        disabled={this.state.formDisable}
+                        options={this.state.horarioZeradoOptions}
+                        value={this.state.horarioZeradoSelected}
+                        onChange={(ev, { value }) =>
+                            this.setState({
+                                horarioZeradoSelected: value,
+                            })
+                        }
+                    />
+                    <Form.Field
+                        id="form-input-control-last-name"
+                        control={Dropdown}
+                        width={6}
+                        label="Status Contrato"
+                        selection
+                        disabled={this.state.formDisable}
+                        options={this.state.statusContratoOptions}
+                        value={this.state.statusContratoSelected}
+                        onChange={(ev, { value }) =>
+                            this.setState({
+                                statusContratoSelected: value,
+                            })
+                        }
+                    />
+                </Form.Group>
+                <div className="text-right">
+                    <Button
+                        type="submit"
+                        content="Buscar"
+                        loading={isLoading}
+                        disabled={this.isLoading}
+                    />
+                </div> */}
+            </Form>
+
+
             {!isLoading && (
                 <div className="text-right">
                     <small>
@@ -102,9 +259,11 @@ const DebtsList = () => {
                         <Table.HeaderCell>Ações</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-                {
-                    listDebts.map(debt => renderDebtRow(debt))
-                }
+                <Table.Body>
+                    {
+                        listDebts.map(debt => renderDebtRow(debt))
+                    }
+                </Table.Body>
             </Table>
             <Pagination defaultActivePage={activePage} disabled={isLoading} onPageChange={handlePaginationChange} totalPages={totalPages} />
         </Container>
