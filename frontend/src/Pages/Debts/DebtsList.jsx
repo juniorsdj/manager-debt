@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Table, Pagination, Breadcrumb, Form, Dropdown, Icon } from 'semantic-ui-react';
+import { Container, Table, Pagination, Breadcrumb, Form, Dropdown, Icon, Modal, Header, Button } from 'semantic-ui-react';
 import { format } from 'date-fns';
 import br from 'date-fns/locale/pt-BR';
 import { debtsRequests } from './../../Services/Requests'
 import { SIZE_DEFAULT_PAGE } from './../../constants'
+import DebtForm from './DebtForm'
 
 const OPTIONS_SORT = [
     {
@@ -34,6 +35,9 @@ const DebtsList = () => {
     const [totalPages, setTotalPages] = useState(0)
     const [activePage, setActivePage] = useState(1)
     const [sortSearch, setSortSearch] = useState("debt_date_desc")
+    const [modalIsOpened, setModalIsOpened] = useState(false)
+    const [debtSelected, setDebtSelected] = useState({})
+
 
     useEffect(() => {
         setIsLoading(true)
@@ -58,7 +62,7 @@ const DebtsList = () => {
 
 
     function removeDebt(debtId) {
-        if(!window.confirm("Você deseja realmente excluir essa dívida?")) return null
+        if (!window.confirm("Você deseja realmente excluir essa dívida?")) return null
         setIsLoading(true)
         debtsRequests.deleteDebtById(debtId)
             .then((r) => {
@@ -84,16 +88,12 @@ const DebtsList = () => {
             <Table.Row
                 textAlign='center'
                 key={debt._id}
-                onClick={(item) => {
-                    console.log(item)
-
-                    // setAction(undefined);
-                    // dispatch(
-                    //     DeliveriesActions.deliverySelected(delivery as any),
-                    // );
+                onClick={() => {
+                    setDebtSelected(debt)
+                    setModalIsOpened(true)
                 }}
             >
-                <Table.Cell>{debt.userId}</Table.Cell>
+                <Table.Cell>{debt.userName}</Table.Cell>
                 <Table.Cell> {debt.createdAt
                     ? format(
                         new Date(debt.createdAt),
@@ -113,10 +113,14 @@ const DebtsList = () => {
                 )
                     : null}</Table.Cell>
                 <Table.Cell>{debt.value}</Table.Cell>
-                <Table.Cell>
-                    <Icon style={{ padding: 20 }} name="trash alternate" onClick={(e) => {
+                <Table.Cell >
+                    <div style={{ padding: 20 }} onClick={(e) => {
+                        e.stopPropagation()
                         removeDebt(debt._id)
-                    }} />
+                    }}>
+                        <Icon name="trash alternate" />
+                    </div>
+
 
                 </Table.Cell>
             </Table.Row>
@@ -169,7 +173,7 @@ const DebtsList = () => {
             <Table padded='very'>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>UserId</Table.HeaderCell>
+                        <Table.HeaderCell>Nome</Table.HeaderCell>
                         <Table.HeaderCell>Data de criação</Table.HeaderCell>
                         <Table.HeaderCell>Motivo</Table.HeaderCell>
                         <Table.HeaderCell>Data da dívida</Table.HeaderCell>
@@ -184,6 +188,28 @@ const DebtsList = () => {
                 </Table.Body>
             </Table>
             <Pagination defaultActivePage={activePage} disabled={isLoading} onPageChange={handlePaginationChange} totalPages={totalPages} />
+
+            <Modal
+                onClose={() => setModalIsOpened(false)}
+                open={modalIsOpened}
+            >
+                <Header icon='money bill alternate outline' content='Dívida' />
+                <Modal.Content>
+                    <DebtForm/>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color='black' onClick={() => setModalIsOpened(false)}>
+                        Nope
+        </Button>
+                    <Button
+                        content="Yep, that's me"
+                        labelPosition='right'
+                        icon='checkmark'
+                        onClick={() => setModalIsOpened(false)}
+                        positive
+                    />
+                </Modal.Actions>
+            </Modal>
         </Container>
     );
 };
