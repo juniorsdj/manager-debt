@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Table, Pagination, Breadcrumb, Form, Dropdown, Tab } from 'semantic-ui-react';
+import { Container, Table, Pagination, Breadcrumb, Form, Dropdown, Icon } from 'semantic-ui-react';
 import { format } from 'date-fns';
 import br from 'date-fns/locale/pt-BR';
 import { debtsRequests } from './../../Services/Requests'
@@ -56,6 +56,26 @@ const DebtsList = () => {
             )
     }, [activePage, sortSearch])
 
+
+    function removeDebt(debtId) {
+        if(!window.confirm("Você deseja realmente excluir essa dívida?")) return null
+        setIsLoading(true)
+        debtsRequests.deleteDebtById(debtId)
+            .then((r) => {
+                if (r.r) {
+                    setIsLoading(false)
+                    setListDebts(listDebts.filter(debt => debt._id !== debtId))
+                    setTotalCountDebts(totalCountDebts - 1)
+                    setTotalPages(Math.ceil(totalCountDebts / SIZE_DEFAULT_PAGE))
+                }
+            })
+            .catch(
+                err => {
+                    setIsLoading(false)
+                    console.log(err)
+                }
+            )
+    }
     function handlePaginationChange(ev, { activePage }) {
         setActivePage(activePage)
     }
@@ -93,7 +113,12 @@ const DebtsList = () => {
                 )
                     : null}</Table.Cell>
                 <Table.Cell>{debt.value}</Table.Cell>
-                <Table.Cell>Actions</Table.Cell>
+                <Table.Cell>
+                    <Icon style={{ padding: 20 }} name="trash alternate" onClick={(e) => {
+                        removeDebt(debt._id)
+                    }} />
+
+                </Table.Cell>
             </Table.Row>
         );
     }

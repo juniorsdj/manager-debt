@@ -1,5 +1,5 @@
 import React from 'react';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
 
 
 export const handleResponseSuccess = async function (response) {
@@ -35,10 +35,11 @@ export const handleResponseError = async (error) => {
             case 403:
                 //TODO implementar regra de segurança para 403 nos requests
                 break;
-                break;
+            default:
+
         }
     } else {
-        if (error.message == 'Network Error') {
+        if (error.message === 'Network Error') {
             // TODO implementar o que será feito em casos de network error
         }
     }
