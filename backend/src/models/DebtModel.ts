@@ -21,7 +21,6 @@ export class DebtModel extends BaseModel implements IDebt {
         debtDate: Date,
         value: number): IDebt | string {
         const dbt = new DebtModel(userId,userName, reason, debtDate, value)
-
         if (value < 0) {
             return "Valor do débito deve ser maior que 0"
         }

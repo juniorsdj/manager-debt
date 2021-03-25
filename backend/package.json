@@ -4,6 +4,9 @@
   "description": "",
   "main": "cluster.js",
   "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig-build.json",
+    "deploy": "npm run test && npm run build && git add . && git commit -m build",
+    "start": "node dist/cluster.js",
     "dev": "tsnd --no-notify --inspect --transpile-only --ignore-watch node_modules --respawn src/index.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand"
   },
