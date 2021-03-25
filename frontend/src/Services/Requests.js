@@ -2,6 +2,7 @@ import AxiosApi from './AxiosApi';
 import queryString from 'query-string';
 
 const stringifyQueryString = (obj) => {
+    // eslint-disable-next-line 
     const keys = Object.keys(obj).filter(key => obj[key] != '');
     const retorno = {};
     keys.forEach(key => (retorno[key] = obj[key]));
@@ -22,4 +23,15 @@ export const debtsRequests = {
     deleteDebtById: (_id) => {
         return AxiosApi.delete(`/debts/${_id}`);
     },
+    createDebt: ({ userId, reason, value, debtDate }) => {
+        return AxiosApi.post(`/debts`, {
+            userId: String(userId), reason, value: Number(value), debtDate
+        });
+    },
+}
+
+export const usersRequests = {
+    getAll: () => {
+        return AxiosApi.get(`/users`);
+    }
 }

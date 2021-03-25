@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Table, Pagination, Breadcrumb, Form, Dropdown, Icon, Modal, Header, Button } from 'semantic-ui-react';
+import { Container, Table, Pagination, Breadcrumb, Form, Dropdown, Icon } from 'semantic-ui-react';
 import { format } from 'date-fns';
 import br from 'date-fns/locale/pt-BR';
 import { debtsRequests } from './../../Services/Requests'
@@ -30,6 +30,7 @@ const OPTIONS_SORT = [
 ]
 const DebtsList = () => {
     const [isLoading, setIsLoading] = useState(false)
+    const [isUpdatedList, setIsUpdatedList] = useState(false)
     const [listDebts, setListDebts] = useState([])
     const [totalCountDebts, setTotalCountDebts] = useState(0)
     const [totalPages, setTotalPages] = useState(0)
@@ -58,7 +59,7 @@ const DebtsList = () => {
                     console.log(err)
                 }
             )
-    }, [activePage, sortSearch])
+    }, [activePage, sortSearch, isUpdatedList])
 
 
     function removeDebt(debtId) {
@@ -189,27 +190,12 @@ const DebtsList = () => {
             </Table>
             <Pagination defaultActivePage={activePage} disabled={isLoading} onPageChange={handlePaginationChange} totalPages={totalPages} />
 
-            <Modal
-                onClose={() => setModalIsOpened(false)}
-                open={modalIsOpened}
-            >
-                <Header icon='money bill alternate outline' content='Dívida' />
-                <Modal.Content>
-                    <DebtForm/>
-                </Modal.Content>
-                <Modal.Actions>
-                    <Button color='black' onClick={() => setModalIsOpened(false)}>
-                        Nope
-        </Button>
-                    <Button
-                        content="Yep, that's me"
-                        labelPosition='right'
-                        icon='checkmark'
-                        onClick={() => setModalIsOpened(false)}
-                        positive
-                    />
-                </Modal.Actions>
-            </Modal>
+
+            <DebtForm debt={debtSelected} isOpened={modalIsOpened} onClose={() => {
+                setIsUpdatedList(!isUpdatedList)
+                setModalIsOpened(false)
+            }} />
+
         </Container>
     );
 };
