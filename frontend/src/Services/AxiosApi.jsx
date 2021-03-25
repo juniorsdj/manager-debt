@@ -48,7 +48,7 @@ export const handleResponseError = async (error) => {
 };
 
 const AxiosApi = axios;
-AxiosApi.defaults.baseURL = process.env.REACT_APP_API_URL;
+AxiosApi.defaults.baseURL = "https://backend-manager-debt.herokuapp.com";
 AxiosApi.interceptors.response.use(handleResponseSuccess, handleResponseError);
 
 export const setBearerToken = (token) => {
