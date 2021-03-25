@@ -25,10 +25,10 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 # Como usar?
 
 Para utilizar, você deve acessar a url 
-`/dividas`
+[http://localhost:3000/dividas](http://localhost:3000/#/dividas)
 
 Dessa forma, você irá conseguir visualizar uma listagem com as dívidas que estão cadastradas.
-Nesta listagem você pode clicar no botão "Nova Dívida" para realizar a inserção de mais uma dívida no sistema, podendo escolher qual o usuário que está associado a aquela dívida, a razão, a data da dívida e qual o valor.
+Nesta listagem você pode clicar no botão "Nova Dívida" para realizar a inserção de mais uma dívida no sistema, podendo escolher qual o usuário que está associado a aquela dívida, a razão, a data da dívida e qual o valor. É possível também alterar a ordem em que a listagem é exibida.
 
 Você poderá atualizar as informações referentes a uma dívida a qualquer momento. Para tal, basta clicar no item dentro da listagem, efetuar a alteração necessária e clicar em Editar.
 
