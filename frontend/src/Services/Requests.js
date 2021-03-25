@@ -28,6 +28,11 @@ export const debtsRequests = {
             userId: String(userId), reason, value: Number(value), debtDate
         });
     },
+    updateDebt: (debtId, { reason, value, debtDate }) => {
+        return AxiosApi.put(`/debts/${debtId}`, {
+             reason, value: Number(value), debtDate
+        });
+    },
 }
 
 export const usersRequests = {

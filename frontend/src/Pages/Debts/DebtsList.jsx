@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Table, Pagination, Breadcrumb, Form, Dropdown, Icon } from 'semantic-ui-react';
+import { Container, Table, Pagination, Breadcrumb, Form, Dropdown, Icon, Button } from 'semantic-ui-react';
 import { format } from 'date-fns';
 import br from 'date-fns/locale/pt-BR';
 import { debtsRequests } from './../../Services/Requests'
@@ -138,32 +138,38 @@ const DebtsList = () => {
                 <Breadcrumb.Section active>Dívidas</Breadcrumb.Section>
             </Breadcrumb>
 
+            <div className="small-margin-top text-right">
+                <Button
+                    onClick={() => setModalIsOpened(true)}>
+                    Nova dívida
+                </Button>
 
-            <Form
-                className="small-margin-top"
-                onSubmit={() =>
-                    this.setState({ page: 1 }, () => this.getPlaces())
-                }
-            >
-                <Form.Group>
-                    <Form.Field
-                        id="form-input-control-last-name"
-                        control={Dropdown}
-                        width={6}
-                        label="Ordenação"
-                        selection
-                        search
-                        disabled={isLoading}
-                        options={OPTIONS_SORT}
-                        value={sortSearch}
-                        onChange={(ev, { value }) =>
-                            setSortSearch(value)
-                        }
-                    />
-                </Form.Group>
-            </Form>
+            </div>
+            <div>
+                <Form
+                    onSubmit={() =>
+                        this.setState({ page: 1 }, () => this.getPlaces())
+                    }
+                >
+                    <Form.Group>
+                        <Form.Field
+                            id="form-input-control-last-name"
+                            control={Dropdown}
+                            width={6}
+                            label="Ordenação"
+                            selection
+                            search
+                            disabled={isLoading}
+                            options={OPTIONS_SORT}
+                            value={sortSearch}
+                            onChange={(ev, { value }) =>
+                                setSortSearch(value)
+                            }
+                        />
+                    </Form.Group>
+                </Form>
 
-
+            </div>
             {!isLoading && (
                 <div className="text-right">
                     <small>
@@ -193,6 +199,7 @@ const DebtsList = () => {
 
             <DebtForm debt={debtSelected} isOpened={modalIsOpened} onClose={() => {
                 setIsUpdatedList(!isUpdatedList)
+                setDebtSelected({})
                 setModalIsOpened(false)
             }} />
 

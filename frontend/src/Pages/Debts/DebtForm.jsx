@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Modal, Header } from 'semantic-ui-react'
 import { useForm } from 'react-hook-form';
@@ -24,6 +25,7 @@ const DebtForm = ({ debt, isOpened, onClose }) => {
                     if (debt)
                         await editDebt(debt._id, data);
                     return;
+                default:
             }
             console.log(data)
         } catch (err) {
@@ -47,7 +49,20 @@ const DebtForm = ({ debt, isOpened, onClose }) => {
             })
     }
     const editDebt = async (debtId, data) => {
-       console.log(data)
+        setIsLoading(true)
+        debtsRequests.updateDebt(debtId, data)
+            .then(r => {
+                setIsLoading(false)
+                if (r.r) {
+                    console.log("sucesso")
+                    onClose(true)
+                } else {
+                    console.log(r.errors)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
 
@@ -92,9 +107,12 @@ const DebtForm = ({ debt, isOpened, onClose }) => {
 
     }, [])
 
+
     useEffect(() => {
-        if (debt) {
-            adjustValuesToEdit(debt);
+        if (!isEmpty(debt)) {
+            return adjustValuesToEdit(debt);
+        } else {
+            setActionForm("Cadastrar")
         }
     }, [debt]);
     return (
@@ -106,18 +124,23 @@ const DebtForm = ({ debt, isOpened, onClose }) => {
             <Modal.Content>
                 <Form id="id-form" onSubmit={handleSubmit(handleSubmitForm)}>
                     <Form.Group inline widths='equal'>
+                        {
+                            actionForm === 'Cadastrar' && (
+                                <Form.Field>
+                                    <SelectField
+                                        name='userId'
+                                        label='Nome'
+                                        register={register}
+                                        options={usersOptions}
+                                        setValue={setValue}
+                                        disabled={isLoading}
+                                        required
+                                        placeholder='José de Abreu da Silva'
+                                    />
+                                </Form.Field>
+                            )
+                        }
 
-                        <Form.Field className="required">
-                            <SelectField
-                                name='userId'
-                                label='Nome'
-                                register={register}
-                                options={usersOptions}
-                                setValue={setValue}
-                                required
-                                placeholder='José de Abreu da Silva'
-                            />
-                        </Form.Field>
 
                         <Form.Field className="required">
                             <label>Motivo</label>

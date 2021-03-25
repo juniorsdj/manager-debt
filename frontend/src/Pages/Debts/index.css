@@ -1,3 +1,10 @@
 .text-right{
     text-align: right;
 }
+
+.small-margin-top{
+    margin-top: 20px;
+}
+.small-padding{
+    margin: 20px;
+}
