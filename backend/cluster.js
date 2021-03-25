@@ -6,10 +6,10 @@ const WORKERS = process.env.WEB_CONCURRENCY || 2;
 console.log(`CRIANDO ${WORKERS} INSTANCIAS DE EXECUÇÃO`);
 throng(
     {
+        workerStartFunction: start,
         workers: WORKERS,
         lifetime: Infinity,
-    },
-    start,
+    }
 );
 
 function start() {
