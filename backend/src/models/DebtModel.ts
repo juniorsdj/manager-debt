@@ -51,7 +51,7 @@ export class DebtModel extends BaseModel implements IDebt {
         }
 
         if (debtDate) {
-            dbt.debtDate = debtDate
+            dbt.debtDate = new Date(debtDate)
         }
         if (reason) {
             dbt.reason = reason

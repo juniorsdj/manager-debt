@@ -121,11 +121,11 @@ export class DebtCommand extends BaseCommand {
                 return this.addError(debtToUpdate)
             }
 
-            if (!debtToUpdate._id) {
+            if (!dbt._id) {
                 return this.addError("Id não encontrado")
             }
-
-            const isUpdated = await this.repository.update(debtToUpdate._id, debtToUpdate)
+            delete debtToUpdate._id
+            const isUpdated = await this.repository.update(dbt._id, debtToUpdate)
 
 
             if (!isUpdated) {
